@@ -1,134 +1,98 @@
-# SymptomCheck Bench
+# MedAsk Benchmarks
 
+A comprehensive suite of medical AI benchmarks for evaluating Large Language Model (LLM) performance on clinical tasks.
 
-SymptomCheck Bench is an OSCE-style benchmark designed to evaluate the diagnostic accuracy of Large Language Model (LLM) based medical agents in symptom assessment conversations.
+## Overview
 
-The benchmark simulates medical consultations through a structured four-step process:
-1. Initialization: Selection of a clinical vignette
+This repository contains multiple medical AI benchmarks developed by MedAsk to evaluate and compare the performance of LLMs on various medical tasks:
+
+### 🩺 SymptomCheck Bench
+An OSCE-style benchmark for evaluating diagnostic accuracy of LLM-based medical agents in symptom assessment conversations. The benchmark simulates medical consultations through a structured four-step process:
+1. Initialization: Selection of a clinical vignette  
 2. Dialogue: Simulated conversation between an LLM agent and patient
 3. Diagnosis: Generation of top 5 differential diagnoses
 4. Evaluation: Automated assessment of diagnostic accuracy
 
-For more details about the benchmark, methodology, and results, read our blog post:
-https://medask.tech/blogs/introducing-symptomcheck-bench/
+**📖 Blog Post:** [Introducing SymptomCheck Bench](https://medask.tech/blogs/introducing-symptomcheck-bench/)
 
+### 🚨 Triage Bench  
+A benchmark for evaluating LLM performance on medical triage classification tasks. Models classify clinical vignettes into three urgency levels:
+- **Emergency (em)**: Requires immediate emergency room attention
+- **Non-Emergency (ne)**: Needs medical evaluation within a week  
+- **Self-care (sc)**: Can be managed with self-care and monitoring
 
+**📖 Blog Post:** [Medical AI Triage Accuracy 2025: MedAsk Beats OpenAI's O3 & GPT-4.5](https://medask.tech/blogs/medical-ai-triage-accuracy-2025-medask-beats-openais-o3-gpt-4-5/)
 
-Results of our ICD-10 coding accuracy evaluation can be found in the results folder. For more information refer to:
-https://medask.tech/blogs/how-medasks-cognitive-architecture-improves-icd-10-coding-accuracy/
+## Published Research & Results
 
-Results of our triage accuracy evaluation can be found in the results folder. For more information refer to:
-https://medask.tech/blogs/medask-outperforms-leading-llms-and-symptom-checkers-in-triage-accuracy/
+### ICD-10 Coding Accuracy
+Results from our ICD-10 coding evaluation demonstrate MedAsk's superior accuracy in medical coding tasks. They can be found in the results folder of symptomcheck_bench
+**📖 Read more:** [How MedAsk's Cognitive Architecture Improves ICD-10 Coding Accuracy](https://medask.tech/blogs/how-medasks-cognitive-architecture-improves-icd-10-coding-accuracy/)
+
+## Repository Structure
+
+```
+medask-benchmarks/
+├── README.md                    # This overview
+├── medask/                      # Core supporting functions and LLM clients
+│   ├── ummon/                   # LLM client implementations
+│   ├── models/                  # Data models for communication
+│   └── util/                    # Utility functions
+├── symptomcheck_bench/          # Diagnostic accuracy benchmark
+│   ├── README.md               # Detailed usage instructions
+│   ├── main.py                 # Main evaluation script
+│   ├── vignettes/              # Clinical vignettes
+│   └── results/                # Evaluation results
+└── triage_bench/               # Medical triage benchmark  
+    ├── README.md               # Detailed usage instructions
+    ├── main.py                 # Main evaluation script
+    ├── paired_analysis.py      # Statistical comparison tool
+    ├── vignettes/              # Clinical vignettes
+    └── results/                # Triage evaluation results
+        └── medask_results_jul25/  # July 2025 study results
+```
+
+## Quick Start
 
 ### Installation
 
-```
-conda create -n benchmark python=3.12
+```bash
+# Create and activate environment
+conda create -n medask-benchmarks python=3.12
+conda activate medask-benchmarks
 
-conda activate benchmark
-
+# Install dependencies
 pip install -r requirements/development.txt
 pip install -e .
 
-export KEY_OPENAI="sk-..." # Set your API key in an ENV variable.
+# Set API keys
+export KEY_OPENAI="sk-..."     # For OpenAI models
+export KEY_DEEPSEEK="..."      # For DeepSeek models
 ```
 
-### Usage
+### Running Benchmarks
 
-#### Running the script
-
-##### Inspecting the available script options.
-```
-# Run without any arguments to see all available options.
-python medask/benchmark/main.py
-
-# Output
-usage: main.py [-h] [--doctor_llm DOCTOR_LLM] [--patient_llm PATIENT_LLM]
-               [--evaluator_llm EVALUATOR_LLM] --file {avey,agentclinic}
-               [--num_vignettes NUM_VIGNETTES] [--num_experiments NUM_EXPERIMENTS]
-               [--comment COMMENT] [--result_name_suffix RESULT_NAME_SUFFIX]
-main.py: error: the following arguments are required: --file
+**SymptomCheck Bench:**
+```bash
+cd symptomcheck_bench
+python main.py --file=avey --doctor_llm=gpt-4o --num_vignettes=5
 ```
 
-#### Running a complex example.
-
-##### Starting the script...
-```
-# Run the benchmark on 3 random vignettes from Avey. Repeat the experiment 2 times.
-# Use gpt-4o for the LLM simulating the doctor.
-# By default, gpt-4o-mini is used for the LLM simulating the patient.
-# By default, gpt-4o is used to evaluate the correctness of the resulting diagnoses.
-
-python medask/benchmark/main.py --file=avey --doctor_llm=gpt-4o  --num_vignettes=3 --num_experiments=2
+**Triage Bench:**
+```bash
+cd triage_bench  
+python main.py --model gpt-4o --runs 3
 ```
 
-##### ... generates the following output.
-```
-2024-10-28 21:52:59,084 - [INFO] - benchmark - Running experiment over vignettes [68, 166, 334]
-2024-10-28 21:53:24,619 - [INFO] - benchmark - Dumping results to medask/benchmark/results/2024-10-28T21:52:59_gpt-4o_3.json
+For detailed usage instructions, see the README files in each benchmark directory.
 
-position=1      Nephrolithiasis : [Kidney stones, Ureteral obstruction, Urinary tract infection, Pyelonephritis, Renal colic]
-position=1      Measles : [Measles, Viral exanthem, Roseola, Rubella, Scarlet fever]
-position=1      Cerebral Stroke : [Ischemic stroke, Hemorrhagic stroke, Transient ischemic attack (TIA), Bell's palsy, Intracranial hemorrhage]
+## Supported Models
 
-2024-10-28 21:53:27,234 - [INFO] - benchmark.evaluate - Results of run i=0
-   positions=[1.0, 1.0, 1.0]
-   Number of correct diagnoses: 3 / 3
-   Average position of correct diagnosis: 1.0
+- **OpenAI**: GPT-4o, GPT-4.5, O1, O3 series
+- **DeepSeek**: DeepSeek Chat, DeepSeek Reasoner
+- **MedAsk**: Proprietary medical AI models
 
-position=1      Nephrolithiasis : [Kidney stones, Ureteral stones, Renal colic, Hematuria, Urinary tract obstruction]
-position=1      Measles : [Measles, Viral exanthem, Rubella, Scarlet fever, Roseola]
-position=1      Cerebral Stroke : [Acute Ischemic Stroke, Transient Ischemic Attack, Hemorrhagic Stroke, Bell's Palsy, Migraine with Aura]
+## Citation
 
-2024-10-28 21:53:30,660 - [INFO] - benchmark.evaluate - Results of run i=1
-   positions=[1.0, 1.0, 1.0]
-   Number of correct diagnoses: 3 / 3
-   Average position of correct diagnosis: 1.0
-```
-
-##### Understanding the output.
-```
-# You can see the indices of the vignettes that are used in the experiment.
-
-2024-10-28 21:52:59,084 - [INFO] - benchmark - Running experiment over vignettes [68, 166, 334]
-```
-
-```
-# All the data about the experiment is saved to disk, in this case to  medask/benchmark/results/2024-10-28T21:52:59_gpt-4o_3.json
-
-2024-10-28 21:53:24,619 - [INFO] - benchmark - Dumping results to medask/benchmark/results/2024-10-28T21:52:59_gpt-4o_3.json
-```
-
-
-```
-position=1      Nephrolithiasis : [Kidney stones, Ureteral obstruction, Urinary tract infection, Pyelonephritis, Renal colic]
-
-# This shows the evaluation of the first diagnosis of the first experiment run.
-#  * Nephrolithiasis (Kidney stones) was the correct diagnosis.
-#  * [Kidney stones, Ureteral obstruction, Urinary tract infection, Pyelonephritis, Renal colic] Are the 5 most likely diagnoses the symptom #    checker agent decided upon
-#  * position=1 Is the result of the evaluator LLM. It decided the correct diagnosis was found in position 1 in the differential diagnosis #    list
-
-```
-
-```
-2024-10-28 21:53:27,234 - [INFO] - benchmark.evaluate - Results of run i=0
-   positions=[1.0, 1.0, 1.0]
-   Number of correct diagnoses: 3 / 3
-   Average position of correct diagnosis: 1.0
-
-# This shows the aggregated results of the first experiment run:
-#  * For the first vignette, the evaluator thought that the first diagnosis is the correct one, hence 1.
-#  * For the second vignette, the evaluator thought that the first diagnosis is the correct one, hence 1.
-#  * For the third vignette, the evaluator thought that the first diagnosis is the correct one, hence 1.
-# Overall, thus 3 / 3 diagnoses were correct, and the average position of the correct diagnoses is (1.0 + 1.0 + 1.0) / 3 = 1.0
-
-```
-
-### Inspect the results of a benchmark run.
-
-```
-Here you see how to read from disk the result of the benchmark you ran above.
-```
-
-![screenshot-2024-10-28_21:57:54](https://github.com/user-attachments/assets/e5abad75-e85d-451c-ba5c-e496522614de)
+If you use these benchmarks in your research, please cite the associated publications and reference the relevant MedAsk blog posts linked above.
 
