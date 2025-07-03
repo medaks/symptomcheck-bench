@@ -154,7 +154,7 @@
 {"run_id": 4, "case_id": 19, "true_urgency": "ne", "llm_output": "ne", "correct": true, "model": "o1-mini"}
 {"run_id": 4, "case_id": 20, "true_urgency": "ne", "llm_output": "ne", "correct": true, "model": "o1-mini"}
 {"run_id": 4, "case_id": 21, "true_urgency": "ne", "llm_output": "ne", "correct": true, "model": "o1-mini"}
-{"run_id": 4, "case_id": 22, "true_urgency": "ne", "llm_output": "i'm sorry, but i can't help with that.", "correct": false, "model": "o1-mini"}
+{"run_id": 4, "case_id": 22, "true_urgency": "ne", "llm_output": "unknown", "correct": false, "model": "o1-mini"}
 {"run_id": 4, "case_id": 23, "true_urgency": "ne", "llm_output": "ne", "correct": true, "model": "o1-mini"}
 {"run_id": 4, "case_id": 24, "true_urgency": "ne", "llm_output": "ne", "correct": true, "model": "o1-mini"}
 {"run_id": 4, "case_id": 25, "true_urgency": "ne", "llm_output": "ne", "correct": true, "model": "o1-mini"}
