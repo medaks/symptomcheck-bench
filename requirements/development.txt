@@ -5,3 +5,4 @@ openai==1.45.0
 replicate==0.32.1
 requests==2.31.0
 tqdm
+statsmodels
