@@ -1,4 +1,5 @@
 __pycache__/
-medask/benchmark/results/*json
+symptomcheck_bench/results/*json
+triage_bench/results/*jsonl
 *.egg-info
 **.DS_Store

@@ -27,7 +27,8 @@ TRIAGE_ORDER = {"sc": 1, "ne": 2, "em": 3}
 TRIAGE_LEVELS = ["em", "ne", "sc"]
 
 # ----------------------- Prompts -------------------------
-ORIGINAL_PROMPT = """
+
+ACTIVE_PROMPT = """
 Please give a triage classification for the following vignette.
 The criteria for triage classifications are presented below:
 Emergency (em): Call 911 or go directly to the emergency room;
@@ -43,59 +44,6 @@ RESPONSE FORMAT:
 Vignette:
 {vignette}
 """
-
-NEW_PROMPT = """
-You are an expert medical triager. Your task is to classify medical vignettes accurately into triage categories.
-
-The criteria for triage classifications are:
-- Emergency (em): Call 911 or go directly to the emergency room;
-- Non-Emergency (ne): Try to see a doctor, but the symptoms do not require immediate attention at an emergency room. For example, you can see a doctor in the next week.
-- Self-care (sc): Let the health issue get better on its own and review the situation in a few days again.
-
-SAFETY PRIORITY: When in doubt between Emergency and Non-Emergency, choose Emergency.
-FAVOR SELF-CARE: When in doubt between Self-Care and Non-Emergency, choose Self-Care.
-
-RESPONSE FORMAT:
-    Provide only one of the following responses:
-    - `em`
-    - `ne`
-    - `sc`
-
-Vignette:
-{vignette}
-"""
-
-ARTICLE2_PROMPT = """
-You are an expert medical triager. Your task is to classify medical vignettes accurately into triage categories.
-
-The criteria for triage classifications are:
-- Emergency (em): Call 911 or go directly to the emergency room;
-- Non-Emergency (ne): Try to see a doctor, but the symptoms do not require immediate attention at an emergency room. For example, you can see a doctor in the next week.
-- Self-care (sc): Let the health issue get better on its own and review the situation in a few days again.
-
-SAFETY PRIORITY: When in doubt between Emergency and Non-Emergency, choose Emergency.  
-FAVOR SELF-CARE: When in doubt between Self-Care and Non-Emergency, choose Self-Care.
-
-ADDITIONAL TRIAGE RULES  
-- Persistent or recurrent joint or muscle pain lasting over a month should be classified as ne (doctor’s evaluation), not sc. 
-- If the patient aspirates food but quickly clears their airway, is breathing normally, and has no persistent choking or respiratory distress, classify as sc, not ne or em.
-- Pain persisting beyond a week after an injury involving a joint or thumb, especially when affecting grip or weight-bearing, requires ne.
-- Any new unexplained skin lesion appearing during long-term medication (e.g., anti-TB therapy) should be triaged as ne, not sc.
-- Even minor animal bites or tooth scratches inside the nose or mouth always require at least ne evaluation.
-- A unilateral painful vesicular rash suggestive of shingles, lasting more than 5 days without improvement, should be classified as ne (doctor’s evaluation), even if antiviral treatment window (>72h) has passed.
-- Sudden, intense, stabbing chest pain lasting several minutes that resolves immediately with a distinct "pop" sensation, even if asymptomatic afterward, requires ne evaluation (doctor’s evaluation), not sc.
-
-RESPONSE FORMAT:  
-Provide only one of the following responses:
-- em  
-- ne  
-- sc  
-
-Vignette:
-{vignette}
-"""
-
-ACTIVE_PROMPT = ARTICLE2_PROMPT
 
 # ───────────────────────── Helper ──────────────────────────
 
